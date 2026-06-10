@@ -48,13 +48,13 @@ teachers_list = {
 educators_list = {
     "ANDRZEJ_BOROWSKI": {
         "IMIE_WYCHOWAWCY": "ANDRZEJ",
-        "NAZWISKO_NAUCZYCIELA": "BOROWSKI",
+        "NAZWISKO_WYCHOWAWCY": "BOROWSKI",
         "KLASA_WYCHOWAWCY": "1C"
     }
 }
 
 
-def create_user(user_choice_create: str) :
+def create_user(user_choice_create: str) : # funkcja tworząca nowego użytkownika, funkcja zwraca dane jako słownink, który potem w głównej części programu dodaje to do innego słownika, gdzie przechowywane są dane użytkownika 
     if user_choice_create == "UCZEŃ":
         print("\n=== Wpisz imię ucznia ===\n")
         create_user_student_name = str(input()).upper().strip()
@@ -63,7 +63,7 @@ def create_user(user_choice_create: str) :
         print("\n=== Wpisz klase ucznia ===\n")
         create_user_student_class = str(input()).upper().strip()
         return  {
-            f"{create_user_student_name}_{create_user_student_surname}":
+            f"{create_user_student_name}_{create_user_student_surname}": 
                 {
                   "IMIE_UCZNIA": create_user_student_name,
                   "NAZWISKO_UCZNIA": create_user_student_surname,
@@ -111,7 +111,7 @@ def create_user(user_choice_create: str) :
             f"{create_user_educator_name}_{create_user_educator_surname}":
                 {
                     "IMIE_WYCHOWAWCY": create_user_educator_name,
-                    "NAZWISKO_NAUCZYCIELA": create_user_educator_surname,
+                    "NAZWISKO_WYCHOWAWCY": create_user_educator_surname,
                     "KLASA_WYCHOWAWCY": create_user_educator_class
                 }
         }
@@ -120,7 +120,7 @@ def create_user(user_choice_create: str) :
 
 is_program_running = True
 while is_program_running:
-    print("=== Wpisz funkcje z listy, aby ją wywołać ===")
+    print("=== Wpisz funkcje z listy, aby ją wywołać ===") # menu główne aplikacji
     user_choice = str(input("\n[UTWÓRZ] \n"
                             "\n[ZARZĄDZAJ] \n"
                             "\n[KONIEC] \n")).upper()
@@ -128,7 +128,7 @@ while is_program_running:
 
     if user_choice == "UTWÓRZ":
         is_user_creating = True
-        while is_user_creating:
+        while is_user_creating: # pętla działa podczas tworzenia nowego użytkownika, do momentu, aż nie padnie komenda "koniec"
             print("\nFUNKCJA: UTWÓRZ \n")
             print("=== Wpisz typ użytkownika, który chcesz "
                                        "utworzyć ===")
@@ -161,14 +161,22 @@ while is_program_running:
 
             if user_choice_manage == "KLASA":
                 user_choice_manage_get_class = (str(input
-                (" === Wpisz nazwę klasy którą chcesz sprawdzić ===\n")).upper().strip())
+                (" === Wpisz nazwę klasy którą chcesz sprawdzić ===\n")).upper().strip())   
 
                 for student_class in students_list:
                     if students_list[student_class]["KLASA_UCZNIA"] == user_choice_manage_get_class:
-                        print(students_list[student_class])
-                for educator_class in educators_list:
-                    if educators_list[educator_class]["KLASA_WYCHOWAWCY"] == user_choice_manage_get_class:
-                        print(educators_list[educator_class])
+                        print(f"\nUczniowie należący do klasy {user_choice_manage_get_class}: \n")
+                             
+                        for student in students_list:
+                            print(f"{student.replace("_", " ")}\n")
+                        for educator_class in educators_list:
+                                if educators_list[educator_class]["KLASA_WYCHOWAWCY"] == user_choice_manage_get_class:
+                    
+                                    print(f"Wychowawca klasy: {educators_list[educator_class]["IMIE_WYCHOWAWCY"]} {educators_list[educator_class]["NAZWISKO_WYCHOWAWCY"]}\n")
+                        break
+                    else:
+                        print("\nNie znaleziono danych odnośnie klasy, upewnij się, że wpisał_ś poprawną nazwę klasy i spróbuj ponownie!\n") # walidacja, czy dana klasa istnieje -  jeśli podczas iterowania nie znajdzie nazwy klasy, podnosi błąd
+                        break                
             if user_choice_manage == "UCZEŃ":
                 print("=== Podaj dane ucznia, którego chcesz sprawdzić ===\n")
                 user_choice_manage_get_student_name = str(input("Imię ucznia: ").upper().strip())
@@ -183,10 +191,9 @@ while is_program_running:
                         if student_get_profile["KLASA_UCZNIA"] in teachers_list[teacher]["KLASY_NAUCZYCIELA"]:
                                 teacher_subject = teachers_list[teacher]["PRZEDMIOT_NAUCZYCIELA"]
                                 student_teachers_list.append([teacher, teacher_subject])
+                                
+                                print(f"\n{teacher.replace("_"," ")}, uczy: {teacher_subject}")
 
-
-
-                    print(f"Nauczyciele ucznia: \n{student_teachers_list}\n")
             if user_choice_manage == "NAUCZYCIEL":
                 print("=== Podaj dane nauczyciela, którego chcesz sprawdzić ===\n")
 
