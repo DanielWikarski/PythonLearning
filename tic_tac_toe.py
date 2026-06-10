@@ -31,7 +31,7 @@ def player_movement_pc ():
 
         for combination in winning_conditions: #iterujemy przez winning conditions 
             check_lineup = [playing_board_spots[spot] for spot in combination] # Tutaj przy iteracji tworzy się "line up" - np. w pierwszej kombinacji sprawdzi nam co jest na  polach 0,1,2, będzie nam to  potrzebne do sprawdzenia, czy są tam nasze "X"
-            if check_lineup.count("X") == 2 and check_lineup.count("O") == 0:   #tutaj sprawdzam czy line up ma dwa "X", żeby móc zadać cios kończący  I NIE MA TAM ENEMY pola
+            if check_lineup.count("X") == 2 and check_lineup.count("O") == 0:   #tutaj sprawdzam czy line up ma dwa "X", jeśli tak, komputer wie, że musi postawić X pomiędzy polami, aby wygrać
                 for spot in check_lineup:
                     if isinstance(spot, int):
                         computer_turn_spot = spot
@@ -39,11 +39,22 @@ def player_movement_pc ():
                         playing_board_spots[computer_turn_spot-1] = "X"
                         show_current_board(playing_board_spots)
                         return playing_board_spots, computer_spots_taken
+                    
+
+            elif check_lineup.count("X") == 0 and check_lineup.count("O") == 2: # implementacja bloku przez komputer, sprawdzam gdzie user postawił dwa kółka, jeśli pierwsza opcja z najlepszą możliwością ruchu komputera nie wypali - to komputer próbuje się bronić
+                for spot in check_lineup:
+                    if isinstance(spot, int):
+                        computer_turn_spot = spot
+                        computer_spots_taken.append(computer_turn_spot - 1) 
+                        playing_board_spots[computer_turn_spot-1] = "X"
+                        show_current_board(playing_board_spots)
+                        return playing_board_spots, computer_spots_taken
+            
 
     # jakby komputer nic nie wylosował, to po prostu na randomowe pole postawi X
     computer_turn_spot = random.choice(free_spots)
     computer_spots_taken.append(computer_turn_spot)
-    playing_board_spots[computer_turn_spot] = "X" # tutaj nie robie -1, bo free spots wypluło  już zindeksowane miejsca, powyżej to były normalne cyfry i żeby zrobić indeks, musiałem zrobić -1
+    playing_board_spots[computer_turn_spot] = "X" # tutaj nie robie -1, bo free spots zwraca już zaindeksowane miejsca
     show_current_board(playing_board_spots)
     return playing_board_spots, computer_spots_taken
           
@@ -52,16 +63,33 @@ def player_movement ():
     print("\n[TWOJA TURA]")
 
     while is_player_choosing:
-        player_turn_spot = int(input("\nWpisz numer pola, na które chcesz stanąć: "))
+        player_turn_spot =(input("\nWpisz numer pola, na które chcesz stanąć: "))
 
-        if playing_board_spots[player_turn_spot-1] == "X":
-            print("Pole jest już zajęte!")
-            is_player_choosing  = True
+        # try: except: - NOWE!!, mogę spróbować wykonać czynność, bez wywalenia błędu
+        try: # sprawdzam czy user wpisał wartość, którą mogę przerobić na inta
+            player_turn_spot = int(player_turn_spot)
 
-        else: 
-            playing_board_spots[player_turn_spot-1] = "O"
-            show_current_board(playing_board_spots)
-            is_player_choosing  = False
+        except:
+            is_player_choosing = True
+
+        if isinstance(player_turn_spot, int):
+
+            if 1 <= player_turn_spot <= 9:
+
+                if playing_board_spots[player_turn_spot-1] == "X" or playing_board_spots[player_turn_spot-1] == "O":
+                    print(f"[BŁAD] Pole {player_turn_spot} jest już zajęte!")
+                    is_player_choosing = True
+                else:
+
+                    playing_board_spots[player_turn_spot-1] = "O"
+                    show_current_board(playing_board_spots)
+                    is_player_choosing  = False
+
+            else:
+                print(f"[BŁĄD] Pole {player_turn_spot} znajduje się poza zakresem planszy! (Pola są oznaczone od 1 do 9)")
+
+        else:
+            print("[BŁAD] Wpisano błędny typ pola - Pole musi być określone jako liczba!")
 def game ():
         print("Cześć, zagrajmy w kółko i krzyżyk! \n")
         print(" == Komputer zaczyna pierwszy == \n")
@@ -81,6 +109,11 @@ def game ():
                     is_game_running = False
                     return         
             player_movement()
+
+            if all(isinstance(spot, str) for spot in playing_board_spots): # porównuje czy wszystkie spoty są już stringami, jeśli tak - remis
+                print("=== REMIS! ===")
+                is_game_running = False
+                return
         return computer_spots_taken, playing_board_spots
         
 game()
