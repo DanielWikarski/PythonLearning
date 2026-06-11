@@ -87,7 +87,7 @@ people = [
 
 
 
-print("=== Zadanie 4 ===")
+# === Zadanie 4 ===
 
 
 
@@ -236,7 +236,7 @@ def quadratic_equation_root(a:int, b:int, c:int):
 
 
 
-print("=== Zadanie 9===")
+# === Zadanie 9===
 
 
 
@@ -295,3 +295,60 @@ def calc_mean(*args) -> float:
 
 # === Zadanie 10 ===
 
+def break_lock():
+    lock_combination = list()
+    print("Zgadnijmy kod do kłódki rowerowej, podaj 5 cyfr, następnie dostosujemy je w taki sposób, aby ułożyła nam kombinacje:")
+    while True: 
+        for digit in range(5):
+            get_number = (input(f"Podaj cyfrę {digit+1} do kombinacji: "))
+            try:
+                get_number = int(get_number) # zamieniamy input na inta jeśli możliwe
+                lock_combination.append(get_number)
+            except:
+                if  not isinstance(get_number, int): # jeśli błędny argument, zaczynamy od początku
+                    print("[BŁĄD] Podano inną wartość niż liczbę!")
+                    print("Wpisz ciąg cyfr od początku...")
+                    break
+        if len(lock_combination) == 5:
+            print(f"Oto twoja kombinacja {lock_combination}")
+            break
+
+    
+    while True: # tryb sprawdzania kombinacji, będzie trwał aż nie uzyskamy kombinacji spełniających wszystkie kryteria
+        for digit in lock_combination: # sprawdzam, czy któraś z cyfr jest większa niż 8 oraz inna niż 0 i 6, jeśli tak - proszę o wpisanie innej liczby i podmieniam ją
+            if digit > 8 or digit == 0 or digit == 6:
+                while True:
+                    wrong_digit_index = lock_combination.index(digit)
+                    print(f"Aktualny szyfr: {lock_combination}")
+                    new_number = int(input(f"Usunięto liczbę {digit} - Wpisz inną cyfrę w te miejsce! [Cyfra ta nie może być większa od 8, i nie może to być liczba 0 lub 6]: "))
+                    if not new_number > 8 and not new_number == 0 and not new_number ==6: # walidacja, czy nowa cyfra pasuje do wymagań
+                        lock_combination[wrong_digit_index] = new_number # podmieniam błędną cyfrę na nową cyfrę w kombinacji
+                        break
+                    else:
+                        print(f"Aktualny szyfr: {lock_combination}")
+                        print("[BŁĄD] Podano błędną cyfrę - Podaj cyfrę wedle wymagań -> [Cyfra ta nie może być większa od 8, i nie może to być liczba 0 lub 6]:  ")
+
+            if lock_combination.count(digit) == 2:
+                print("Znaleziono potwórzenie! - Cyfry w szyfrze nie mogą się powtarzać - ")
+                while True:
+                    wrong_digit_index = lock_combination.index(digit)
+                    print(f"Aktualny szyfr: {lock_combination}")
+                    new_number = int(input(f"Usunięto liczbę {digit} - Wpisz inną cyfrę w te miejsce! [Cyfra nie może występować już w szyfrze, każda z cyfr musi być unikatowa]: "))
+                    if not new_number == digit:
+                        lock_combination[wrong_digit_index] = new_number
+                        break
+                    else:
+                        print(f"Aktualny szyfr: {lock_combination}")
+                        print("[BŁĄD] Podano błędną cyfrę - Podaj cyfrę wedle wymagań -> [Cyfra nie może występować już w szyfrze, każda z cyfr musi być unikatowa]: ")
+
+        # Znaleźć sposób, żeby pętla się wykonywała dopóki po każdej iteracji wszystkie wymagania nie zostaną spełnione. Pętla aktualnie sprawdza każdą z opcji, ale tylko raz, jeśli znów będzie błąd w szyfrze algorytm go nie sprawdzi
+
+
+
+    print(lock_combination)
+
+
+
+
+    
+break_lock()
