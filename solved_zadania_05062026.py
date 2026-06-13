@@ -296,59 +296,175 @@ def calc_mean(*args) -> float:
 # === Zadanie 10 ===
 
 def break_lock():
-    lock_combination = list()
-    print("Zgadnijmy kod do kłódki rowerowej, podaj 5 cyfr, następnie dostosujemy je w taki sposób, aby ułożyła nam kombinacje:")
-    while True: 
-        for digit in range(5):
-            get_number = (input(f"Podaj cyfrę {digit+1} do kombinacji: "))
-            try:
-                get_number = int(get_number) # zamieniamy input na inta jeśli możliwe
-                lock_combination.append(get_number)
-            except:
-                if  not isinstance(get_number, int): # jeśli błędny argument, zaczynamy od początku
-                    print("[BŁĄD] Podano inną wartość niż liczbę!")
-                    print("Wpisz ciąg cyfr od początku...")
-                    break
-        if len(lock_combination) == 5:
-            print(f"Oto twoja kombinacja {lock_combination}")
+
+    while True:
+        lock_combination = random.sample(range(1,8),5) # random.sample() NOWOŚĆ! Zwraca unikalną liste, w środek możemy wrzuić range, żeby zrobić listę liczb z przedziału range.
+        digits_sum = sum(lock_combination)
+
+        if digits_sum == 21 and lock_combination[-1]%2==1 and  not 6 in lock_combination: # walidacja do jakiego momentu ma nam szukać kombinacji
             break
 
+    print(f"Oto Twoja kombinacja: {lock_combination}")
+
+#break_lock()
+
+
+# === Zadanie 11 ===
+
+#number = (input("Wpisz liczbę, a ja sprawdzę, czy podana to liczba to liczba pierwsza: "))
+def is_number_prime(number:int):
+    try:
+        number = int(number) # Próba konwersji inputa na insta
+    except:
+        print("[BŁĄD] Podana wartość nie jest liczbą!") # jeśli się nie powiedzie, podnosimy feedback i program kończy pracę
+        return
+    if not number >= 2: # walidacja czy liczba jest większa lub równa 2
+        print("[BŁĄD] Liczby mniejsze niż 2 nie mogą być liczbami pierwszymi!")
+
+    else:
+        for num in range(2,number): # iteracja przez wszystkie liczby w zakresie od 2 do argumentu liczby przyjętego od użytkownika
+            if  number % num == 0: # zwraca false, jeśli liczba nie jest pierwsza
+                return False
+
+        is_prime = True
+        return is_prime # funkcja zwróci wartość True, jeśli liczba jest pierwsza
+
+
+
+
+# range_min = input("Wpisz początek zakresu: ")
+# range_max = input("Wpisz koniec zakresu: ")
+def prime_in_range(range_min, range_max):
+    prime_numbers_list = list()
+    try:
+        range_min = int(range_min)
+        range_max = int(range_max)
+    except:
+        print(f"[BŁĄD] Dane wejściowe niepoprawne, zakres musi być wyrażony liczbą całkowitą!")
+        return
     
-    while True: # tryb sprawdzania kombinacji, będzie trwał aż nie uzyskamy kombinacji spełniających wszystkie kryteria
-        for digit in lock_combination: # sprawdzam, czy któraś z cyfr jest większa niż 8 oraz inna niż 0 i 6, jeśli tak - proszę o wpisanie innej liczby i podmieniam ją
-            if digit > 8 or digit == 0 or digit == 6:
-                while True:
-                    wrong_digit_index = lock_combination.index(digit)
-                    print(f"Aktualny szyfr: {lock_combination}")
-                    new_number = int(input(f"Usunięto liczbę {digit} - Wpisz inną cyfrę w te miejsce! [Cyfra ta nie może być większa od 8, i nie może to być liczba 0 lub 6]: "))
-                    if not new_number > 8 and not new_number == 0 and not new_number ==6: # walidacja, czy nowa cyfra pasuje do wymagań
-                        lock_combination[wrong_digit_index] = new_number # podmieniam błędną cyfrę na nową cyfrę w kombinacji
-                        break
-                    else:
-                        print(f"Aktualny szyfr: {lock_combination}")
-                        print("[BŁĄD] Podano błędną cyfrę - Podaj cyfrę wedle wymagań -> [Cyfra ta nie może być większa od 8, i nie może to być liczba 0 lub 6]:  ")
-
-            if lock_combination.count(digit) == 2:
-                print("Znaleziono potwórzenie! - Cyfry w szyfrze nie mogą się powtarzać - ")
-                while True:
-                    wrong_digit_index = lock_combination.index(digit)
-                    print(f"Aktualny szyfr: {lock_combination}")
-                    new_number = int(input(f"Usunięto liczbę {digit} - Wpisz inną cyfrę w te miejsce! [Cyfra nie może występować już w szyfrze, każda z cyfr musi być unikatowa]: "))
-                    if not new_number == digit:
-                        lock_combination[wrong_digit_index] = new_number
-                        break
-                    else:
-                        print(f"Aktualny szyfr: {lock_combination}")
-                        print("[BŁĄD] Podano błędną cyfrę - Podaj cyfrę wedle wymagań -> [Cyfra nie może występować już w szyfrze, każda z cyfr musi być unikatowa]: ")
-
-        # Znaleźć sposób, żeby pętla się wykonywała dopóki po każdej iteracji wszystkie wymagania nie zostaną spełnione. Pętla aktualnie sprawdza każdą z opcji, ale tylko raz, jeśli znów będzie błąd w szyfrze algorytm go nie sprawdzi
-
-
-
-    print(lock_combination)
-
-
-
-
+    if range_min > range_max:
+        print("[BŁĄD] Błędny zakres, minimalny zakres nie może być większy niż jego maksymalna wartość!")
+        return
     
-break_lock()
+    for number in range(range_min, range_max+1): # iteruje po zakresie 
+        if is_number_prime(number): # używam funkcji, którą napisałem wyżej do określenia, czy dana liczba jest pierwsza, jeśli funkcja zwróci True - to jest liczba pierwsza
+            prime_numbers_list.append(number)
+    return prime_numbers_list # funkcja zwraca listę liczb pierwszych
+
+
+
+# === Zadanie 13 ===
+
+
+# text = (input("Wpisz dowolny tekst, a ja zliczę liczbę: \n"
+# "[LITER]\n" \
+# "[CYFR]\n" \
+# "[SPACJI]\n" \
+# "------------------------\n" \
+# "Twój tekst: "))
+
+def check_text_elements(text):
+    letter_count = 0
+    digits_count = 0
+    spaces_count = 0
+
+    for element in text:
+        if element == " ": # jeśli jest blanc space, to dodajemy zliczenia pusty miejsc
+            spaces_count +=1
+
+        try:
+            element = int(element) # próbujemy każdy element przerobić na inta, żeby sprawdzić czy dany element może być intem
+            digits_count +=1
+        except:
+            continue # jeśli nie - nie podnoś błędu
+        finally:
+                if not isinstance(element,int) and not element == " " and not element in string.punctuation: # finalnie jeśli element nie jest intem, pustym miejscem i nie znajduje się w zbiorze elementów punctuation (znaki specjalne), to zaliczamy go do liter
+                    letter_count +=1
+
+    print(f"W tekście {text} znajduje jest: \n" \
+        f"[LITER: {letter_count}]\n" \
+        f"[CYFR: {digits_count}]\n" \
+        f"[SPACJI {spaces_count}]\n" \
+        "------------------------\n" \
+          )
+
+
+
+# === Zadanie 14 ===
+
+
+def remove_duplications(item_list:list):
+
+    duplicate_free_list = list() # nowa, czysta lista
+    for item in item_list:
+        if item_list.count(item) >=2 and item not in duplicate_free_list: # jeśli coś się powtarza i nie ma go w nowej liście, to go dodajemy
+            duplicate_free_list.append(item)
+
+        if item_list.count(item) ==1 and item not in duplicate_free_list: # jeśli jest tylko jedna sztuka itemu oraz nie ma go na liście, to go dodajemyt
+            duplicate_free_list.append(item)
+        
+
+    return duplicate_free_list # funkcja zwraca listę bez duplikatów
+
+
+
+
+# === Zadanie 15 ===
+
+def shopping_basket():
+    basket= {}
+    basket_sum = 0
+          
+    while True:
+        user_choice = int(input("Wybierz komendę: \n" \
+        "[DODAJ PRODUKT][1]\n" \
+        "[ZAKOŃCZ  DODAWANIE PRODUKTÓW][2]\n"
+        "--> "))
+
+        if user_choice == 1:
+
+            new_item_name =(input("Wprowadź nazwę produktu, który wkładasz do koszyka: "))
+            print("---------------------------------------------------------------------")
+            new_item_price =((input("Wprowadź cenę produktu, który wkładasz do koszyka: ")))
+            print("---------------------------------------------------------------------")
+
+            try:
+                new_item_price = float(new_item_price)
+            except:
+                print("[BŁĄD] Cena produktu musi być liczbą! - Powrót do menu głównego...\n")
+
+            if isinstance(new_item_price,float):
+                if new_item_price <=0:
+                    print("[BŁĄD] Cena produktu musi być wartością dodatnią! - Powrót do menu głównego...\n")
+            
+                else:
+                    basket[new_item_name] = new_item_price
+
+
+        if user_choice == 2:
+            print("[ZAKOŃCZONO DODAWANIE PRODUKTÓW DO KOSZYKA]")
+            
+            for item in basket:
+                basket_sum =+ basket[item]
+
+            print("Lista zakupionych produktów: \n")
+
+            # ogarnąć printowanie listy produktów
+
+
+
+
+
+
+            print(f"Łączna suma zakupów: {basket_sum}zł")
+            print("=====================================")
+            return
+
+
+
+shopping_basket()
+
+
+
+
