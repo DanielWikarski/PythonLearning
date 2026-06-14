@@ -452,19 +452,186 @@ def shopping_basket():
 
             # ogarnąć printowanie listy produktów
 
-
-
-
-
-
+            for item in basket:
+                print(f"{item}: {basket[item]}zł")
+            print("=====================================")
             print(f"Łączna suma zakupów: {basket_sum}zł")
             print("=====================================")
-            return
+            print(f"Najdroższy przedmiot: {max(basket)}")
+            return basket
 
 
 
-shopping_basket()
+# === Zadanie 16 ===
+
+
+def check_password_strenght(password:str) -> bool:
+    has_eight_letters = False
+    has_punctuation = False
+    has_cap_letter = False
+    has_low_letter = False
+    has_digit = False
+
+    if len(password) >= 8:
+        has_eight_letters = True
+
+    for letter in password: # walidacja każdego ze znaków w haśle
+        
+        if letter in string.punctuation:
+            has_punctuation = True
+
+        if  letter == letter.capitalize() and not letter in string.digits and not letter in string.punctuation:
+            has_cap_letter = True
+        
+        if  letter == letter.lower() and not letter in string.digits and not letter in string.punctuation:
+            has_low_letter = True
+
+
+        try:
+            letter = int(letter)
+            if isinstance(letter, int):
+                has_digit = True
+        except:
+            continue
+    
+
+    if has_eight_letters and has_punctuation and has_cap_letter and has_low_letter and has_digit:
+        return True
+    else:
+        return False
+    
+
+# === Zadanie 17 ===
+
+def has_common_elements(list_a:list, list_b:list) -> dict:
+    lists_elements = {
+        "COMMON_ELEMENTS": []
+
+        ,
+        "LIST_A_UNIQUE_ELEMENTS": []
+
+        ,
+        "LIST_B_UNIQUE_ELEMENTS": []
+
+        
+    }
+
+    # iteracja przez listy, wrzucanie odpowiedniego elementu, do odpowiedniego miejsca w słowniku
+    for element in list_a: 
+        if element in list_b:
+            lists_elements["COMMON_ELEMENTS"].append(element)
+
+        if not element in list_b:
+            lists_elements["LIST_A_UNIQUE_ELEMENTS"].append(element)
+
+        else:
+            lists_elements["LIST_B_UNIQUE_ELEMENTS"].append(element)
+    
+    return lists_elements
 
 
 
+# === Zadanie 18 ===
+
+
+def check_x_is_root_polynominal(polynominal_args:list, x:int): # funkcja pobiera argumenty - listę współczynników wielomianu, x - funkcja sprawdza czy X jest miejscem zerowym wielomianu, czyli po obliczenia wielomimanu dla w(x) = 0
+    # w(x) = arg*X**(liczba args -1 dla każdego kolejnego argumentu)
+    W = 0
+    polynominal_degree = len(polynominal_args)-1
+    for arg in polynominal_args[0:len(polynominal_args)-1]: # iterujemy przez wszystkie współczynniki wielomianu (oprócz ostataniego) i sumujemy W wedle wzoru dla każdego współczynnika
+        W += arg*(x**polynominal_degree)
+        polynominal_degree -= 1 # odejmujemy, bo każdy kolejny współczynnik wielomianu będzie liczony z mniejszą potęgą
+        
+
+    W += polynominal_args[-1]  # dodajemy wyraz wolny na końcu
+    
+    if W == 0:
+        print(f"Wartość wielomianu dla współczynników {polynominal_args} wynosi {W}, więc liczba {x} jest miejscem zerowym tego wielomianu")
+        return W
+
+
+
+# === Zadanie 19 ===
+
+
+def check_polynominal_roots(polynominal_args:list): # funkcja sprawdza miejsca zerowe dla wielomianu
+    #const_term = wyraz wolny wielomianu, czyli ostatni argument z współczynników  wielomimanu, potrzebujemy go, aby móc go potem podstawić do wywołania funkcji, którą napisałem wyżej, gdzie const_term to będzie nasz X dla tej funkcji 
+    # dodatkowo const_term użyję do sprawdzania jego dzielników
+    dividers = list() # tutaj będę wrzucać listę dzielników dla wyrazu wolnego  (constant term)
+    polynominal_roots = list() # tutaj będę dodawać znalezione miejsca zerowe
+    const_term:int = polynominal_args[-1]
+    for num in range(-const_term, abs(const_term)+1): # sprawdzam dzielniki dla wyrazu wolnego, używam abs() - wartość bezwzględna, jeśli wyraz wolny jest ujemny, +1, żeby brało pod uwagę range wraz z wyrazem wolnym
+        if num == 0:
+            continue
+        if const_term % num == 0: # jeśli liczba będzie dzielnikiem wyrazu wolnego, wrzucam go do listy dividers
+            dividers.append(num)
+
+
+    for divider in dividers:
+        num = check_x_is_root_polynominal(polynominal_args, divider) # odpalam funkcje sprawdzającą miejsca zerowe, pod x podstawiam każdy dzielnik wyrazu wolnego
+        if num == 0: # jeśli funkcja zwróci zero, to dzielnik jest miejscem zerowym
+            polynominal_roots.append(divider)
+
+
+    print(f"Wszystkie miejsca zerowe dla wielomianu {polynominal_args}: {polynominal_roots}")
+    return polynominal_roots
+
+
+
+# === Zadanie 20 ===
+
+
+
+def calc_polynominal(polynominal_args:list, x:int) -> int: # funkcja liczy wielomian sposobem schematu Hornera, zwraca wynik
+    # schemat Hornera - biorę pierwszy argument, mnożę go przez X, potem do tego co wyjdzie dołączam kolejny współczynnik, dodaje lub odejmuje w zależności, czy kolejny argument jest dodatni lub ujemny
+    # schemat Hornera to po prostu inny spsosób liczenia wielomianów, nie musimy potęgować każdego współczynnika wielomianu
+
+    polynominal_coefficients = list() # nowa lista współczynników ilorazu wielomianu, to jest to, co nam pętla zwraca przy każdym okrążeniu
+    W = polynominal_args[0] # Zaczynam liczenie od pierwszego współczynnika
+    polynominal_coefficients.append(W)
+
+    for arg in polynominal_args[1:]: # potem robię pętlę, która działa na podstawie od drugiego współczynnika, aż do końca
+        W = (W*x)+arg  # Co pętle wynik nam się aktualizuje, a jako, że liczę to na bierząco, nie musze sumować wyników, tak jak to liczyłem zwykłym sposobem w zadaniach wyżej, po prostu robi się obliczenie, i na podstawie tego wyniku są robione kolejne
+        polynominal_coefficients.append(W)
+
+    polynominal_coefficients.pop() # usuwam ostatni wyraz, bo jest to nasz wynik
+    return W, polynominal_coefficients
+
+
+
+# === Zadanie 21 ===
+
+
+def linear_factor_split(polynominal_args:list): # funkcja przyjmuje listę wielomianów, funkcja będzie działała do momentu maksymalnego odchudzenia listy (będzie miała tylko dwa elementy)
+    polynominal_roots = list() # lista ze znalezionymi miejscami zerowymi
+    factored_form_of_polynominal = list() # lista w której będzie postać iloczynowa wielomianu
+    while not len(polynominal_args) == 2:
+        polynominal_root = check_polynominal_roots(polynominal_args)[0] # sprawdzam miejsca zerowe za pomocą funkcji, którą napisałem przedtem, biorę pierwszą znalezioną
+        new_polynominal_args = calc_polynominal(polynominal_args, polynominal_root)[1] # jako, że ta funkcja też zwraca wynik, to biorę tylko nowe współczynniki (dlatego index 1) i zapisuje je jako nowa lista współcznników wielomianu
+        polynominal_args = new_polynominal_args # od teraz nowa lista, którą dostaliśmy w funkcji wyżej jest naszą główną listą, na której będziemy operować
+        polynominal_roots.append(polynominal_root)
+    # funkcja działa to mommentu, aż nie będzie tylko dwóch elementów na liście, po wykonaniu warunku mamy  gotowe wyrażenie
+
+
+    polynominal_root = check_polynominal_roots(polynominal_args)[0] # sprawdzamy ostatnie miejsce zerowe poza pętlą i dodajemy je do listy
+    polynominal_roots.append(polynominal_root)
+    
+    for root in polynominal_roots:
+        if root < 0:
+            root = root*-1
+            root = f"{root}"
+            factored_form_of_polynominal.append(f"(x+{root})")
+        else:
+            factored_form_of_polynominal.append(f"(x{root*-1})") # żeby dostać postać iloczynową muszę odwrócić miejsca zerowe, czyli gdzie jest -2 to jest 2 itp.
+
+    print(f"Uproszczone wyrażenie: ({polynominal_args[0]}x{polynominal_args[1]})") # po skończonej pętli mamy wynik uproszczonego wyrażenia
+    print(f"Znalezione miejsca zerowe: {polynominal_roots}")
+    print(f"Postać iloczynowa wielomianu dla miejsc zerowych: {"".join(factored_form_of_polynominal)}") # używam "".join(nazwa_listy) żeby pokazało tylko treść, bez typowych dla listy nawiasów i innych znaków
+
+polynominal_args = [1, -1, -4, 4]
+linear_factor_split(polynominal_args)
+
+
+
+# === Zadanie 22 ===
 
