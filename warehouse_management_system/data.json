@@ -1,0 +1,27 @@
+[
+    {
+        "account_balance": 37605.0
+    },
+    {
+        "MYSZKA": {
+            "ILOŚĆ": 10,
+            "CENA": 499.5
+        },
+        "MONITOR": {
+            "ILOŚĆ": 5,
+            "CENA": 1200.0
+        },
+        "KLAWIATURA": {
+            "ILOŚĆ": 4,
+            "CENA": 350.0
+        }
+    },
+    {
+        "2026-06-16 01:07:11.490268": "Dodano do salda 50000.0zł",
+        "2026-06-16 01:07:33.185923": "Zakupiono: MYSZKA | Sztuk: 10 | Cena jednostkowa: 499.5",
+        "2026-06-16 01:08:25.027908": "Zakupiono: MONITOR | Sztuk: 5 | Cena jednostkowa: 1200.0",
+        "2026-06-16 01:08:55.837788": "Zakupiono: KLAWIATURA | Sztuk: 10 | Cena jednostkowa: 350.0",
+        "2026-06-16 01:09:20.289619": "Zakupiono: KLAWIATURA | Sztuk: 4 | Cena jednostkowa: 350.0",
+        "2026-06-16 01:09:37.536647": "Sprzedano produkt: KLAWIATURA | Sztuk: 10 | Po cenie jednostkowej: 350.0 | Dodano do konta: 3500.0"
+    }
+]
