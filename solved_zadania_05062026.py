@@ -628,10 +628,25 @@ def linear_factor_split(polynominal_args:list): # funkcja przyjmuje listę wielo
     print(f"Znalezione miejsca zerowe: {polynominal_roots}")
     print(f"Postać iloczynowa wielomianu dla miejsc zerowych: {"".join(factored_form_of_polynominal)}") # używam "".join(nazwa_listy) żeby pokazało tylko treść, bez typowych dla listy nawiasów i innych znaków
 
-polynominal_args = [1, -1, -4, 4]
-linear_factor_split(polynominal_args)
+
 
 
 
 # === Zadanie 22 ===
+
+def check_polynominal_root_list(polynominal_args:list, hopefully_root_list:list): 
+    # funkcja przyjmuje listę wielomianów i listę miejsc zerowych do sprawdzenia od użytkownika 
+    # funkcja oblicza wartość każdego wielomianu
+    # funkcja sprawdza, czy któreś z miejsc zerowych jest faktycznie poprawne, zwraca te poprawne i nie poprawne na oddzielnych lista
+
+    polynominal_roots_guessed = list() # lista, do której będziemy wrzucali te miejsca zerowe, które dobrze zostały wprowadzone w liście hopefully_root_list
+    polynominal_roots_guessed_wrong = list () # pozostałe elementny, które nie zgadzają się z faktycznymi miejscami zerowymi
+    for root in hopefully_root_list: # sprawdzamy czy któreś z naszych kandydatów do miejsc zerowych jest zgodne z faktycznymi miejscami zerowymi wielomianu, obliczczamy wartości wielomianów, jeśli wyjdzie nam 0, to jest to dobry strzał
+        if calc_polynominal(polynominal_args, root) == 0: # odpalamy funkcje obliczania wielomianu, jeśli wynik będzie zerowy to wedle twierdzenia Bezouta, jest to miejsce zerowe
+            polynominal_roots_guessed.append(root) # jeśli poprawny traf, wrzucamy go do  listy trafionych
+        else:
+            polynominal_roots_guessed_wrong.append(root) # jeśli nie, wędruje do listy nietrafionych
+
+
+    return polynominal_roots_guessed, polynominal_roots_guessed_wrong
 
