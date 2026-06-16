@@ -1,19 +1,23 @@
 [
     {
-        "account_balance": 37605.0
+        "account_balance": 35197.0
     },
     {
         "MYSZKA": {
-            "ILOŚĆ": 10,
+            "ILOŚĆ": 4,
             "CENA": 499.5
         },
         "MONITOR": {
-            "ILOŚĆ": 5,
+            "ILOŚĆ": 4,
             "CENA": 1200.0
         },
         "KLAWIATURA": {
             "ILOŚĆ": 4,
             "CENA": 350.0
+        },
+        "LAPTOP": {
+            "ILOŚĆ": 2,
+            "CENA": 3500.0
         }
     },
     {
@@ -22,6 +26,17 @@
         "2026-06-16 01:08:25.027908": "Zakupiono: MONITOR | Sztuk: 5 | Cena jednostkowa: 1200.0",
         "2026-06-16 01:08:55.837788": "Zakupiono: KLAWIATURA | Sztuk: 10 | Cena jednostkowa: 350.0",
         "2026-06-16 01:09:20.289619": "Zakupiono: KLAWIATURA | Sztuk: 4 | Cena jednostkowa: 350.0",
-        "2026-06-16 01:09:37.536647": "Sprzedano produkt: KLAWIATURA | Sztuk: 10 | Po cenie jednostkowej: 350.0 | Dodano do konta: 3500.0"
+        "2026-06-16 15:51:28.039077": "Dodano do salda 200.0zł",
+        "2026-06-16 15:57:50.383284": "Dodano do salda 0zł",
+        "2026-06-16 16:01:38.725468": "Odjęto od salda 0zł",
+        "2026-06-16 16:01:57.137352": "Dodano do salda 0zł",
+        "2026-06-16 16:04:17.414090": "Dodano do salda 50.0zł",
+        "2026-06-16 16:08:05.083935": "Dodano do salda 200.0zł",
+        "2026-06-16 16:08:49.085657": "Odjęto od salda 300.0zł",
+        "2026-06-16 16:08:58.912831": "Dodano do salda 200.0zł",
+        "2026-06-16 16:09:39.702439": "Dodano do salda 25.0zł",
+        "2026-06-16 16:13:30.684743": "Dodano do salda 20.0zł",
+        "2026-06-16 16:15:47.013008": "Sprzedano produkt: MONITOR | Sztuk: 1 | Po cenie jednostkowej: 1200.0 | Dodano do konta: 1200.0zł",
+        "2026-06-16 17:19:40.773513": "Zakupiono: LAPTOP | Sztuk: 2 | Cena jednostkowa: 3500.0"
     }
 ]
