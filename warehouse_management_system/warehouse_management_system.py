@@ -9,11 +9,9 @@ with open("data.json", "r", encoding="utf-8") as data: # with open("nazwa_pliku"
 
 
 account_balance = data[0]
-print(account_balance)
 warehouse = data[1]
-print(warehouse)
 account_history = data[2]
-print(account_history)
+
 
 def warehouse_management_system(account_balance,warehouse,account_history):
 
