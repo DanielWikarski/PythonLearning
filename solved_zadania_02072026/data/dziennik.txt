@@ -1,0 +1,12 @@
+2026-06-01 10:15:00 - INFO - Użytkownik się zalogował
+2026-06-01 10:16:12 - ERROR - Błąd połączenia
+2026-06-21 13:15:00 - INFO - Użytkownik się zalogował
+2026-06-30 10:16:12 - ERROR - Logowanie się nie powiodło
+2026-06-30 10:18:12 - INFO - Reset hasła użytkownika
+2026-07-11 13:15:00 - INFO - Użytkownik się zalogował
+2026-07-21 13:15:00 - ERROR - Błąd połączenia
+2026-07-22 13:15:00 - INFO - Użytkownik się zalogował
+---Podsumowanie logów---
+INFO: 5 | WARNING: 0 | ERROR: 3
+Data importu logów: 05/07/2026 | 22:47
+----------------------
