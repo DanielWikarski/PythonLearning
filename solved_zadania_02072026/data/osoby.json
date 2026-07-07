@@ -1,0 +1,90 @@
+{
+    "person1" : {
+    "imie": "Danusia",
+    "nazwisko": "Kowalska",
+    "wiek": 35,
+    "branza": "HR",
+    "adres": {
+        "ulica": "Czekoladowa",
+        "nr_budynku": "12a",
+        "kod_pocztowy": "50-501",
+        "miasto": "Wrocław"
+    },
+    "hobby": {
+        "nazwa": "siatkówka",
+        "ile_h_per_tydzien": 5,
+        "zespół": ["Kamila", "Dawid", "Kasia"]
+    },
+    "partner": {
+        "imie": "Tomek",
+        "wiek": 40,
+        "plec": "M",
+        "czy_ma_auto": false
+    }
+},
+
+"person2" : {
+    "imie": "Ania",
+    "nazwisko": "Niedziela",
+    "wiek": 25,
+    "branza": "education",
+    "adres": {
+        "ulica": "Boczna",
+        "nr_budynku": "4/5",
+        "kod_pocztowy": "12-123",
+        "miasto": "Szczecin"
+    },
+    "hobby": {
+        "nazwa": "czytanie ksiazek",
+        "ile_h_per_tydzien": 15,
+        "zespół": []
+    },
+    "partner": {
+        "imie": "Andrzej",
+        "wiek": 28,
+        "plec": "M",
+        "czy_ma_auto": true
+    }
+},
+"person3" : {
+    "imie": "Andrzej",
+    "nazwisko": "Niedziela",
+    "wiek": 28,
+    "branza": "sales & marketing",
+    "adres": {
+        "ulica": "Boczna",
+        "nr_budynku": "4/5",
+        "kod_pocztowy": "12-123",
+        "miasto": "Szczecin"
+    },
+    "hobby": {
+        "nazwa": "przeglądanie OLX",
+        "ile_h_per_tydzien": 10,
+        "zespół": []
+    },
+      "partner": {
+        "imie": "Ania",
+        "wiek": 25,
+        "plec": "K",
+        "czy_ma_auto": false
+    }
+},
+"person4" : {
+    "imie": "Jadwiga",
+    "nazwisko": "Marzec",
+    "wiek": 60,
+    "branza": "sprzedaż przedmiotów DYI",
+    "adres": {
+        "ulica": "Krzywa",
+        "nr_budynku": "1",
+        "kod_pocztowy": "15-550",
+        "miasto": "Białystok"
+    },
+    "hobby": {
+        "nazwa": "rozwiązywane krzyżówek",
+        "ile_h_per_tydzien": 6,
+        "zespół": []
+    },
+      "partner": null
+}
+}

@@ -1,0 +1,22 @@
+{
+    "HR": {
+        "limit_wynagrodzenia" : 7000,
+        "lokalizacja" : "Warszawa"
+    },
+    "IT": {
+        "limit_wynagrodzenia" : 10000,
+        "lokalizacja" : "Białystok"
+    },
+    "Sales": {
+        "limit_wynagrodzenia" : 9000,
+        "lokalizacja" : "Białystok"
+    },
+    "Help_Desk": {
+        "limit_wynagrodzenia" : 6500,
+        "lokalizacja" : "Białystok"
+    },
+    "IT_Manager": {
+        "limit_wynagrodzenia" : 8000,
+        "lokalizacja" : "Warszawa"
+    }
+}

@@ -1,6 +1,8 @@
 from pprint import pprint
 import datetime
 import csv
+import json
+import os
 ## Zadanie 1 
 
 # with open("data/notatki.txt", mode="r", encoding="UTF-8") as f:
@@ -111,21 +113,106 @@ import csv
 ## Zadanie 5
 
 
-with open("data/osoby.csv", mode="r", encoding="UTF-8") as f:
-    people = csv.DictReader(f, delimiter=";")
-    miasta = {}
-    for person in people:
-        if person["miasto"] in miasta:
-            miasta[person["miasto"]] +=1
-        else:
-            miasta[person["miasto"]] =1
+# with open("data/osoby.csv", mode="r", encoding="UTF-8") as f:
+#     people = csv.DictReader(f, delimiter=";")
+#     miasta = {}
+#     for person in people:
+#         if person["miasto"] in miasta:
+#             miasta[person["miasto"]] +=1
+#         else:
+#             miasta[person["miasto"]] =1
 
-miasta_popularity_sorted = dict(sorted(miasta.items(), key=lambda miasto: miasto[1], reverse=True)) # żeby posortować słownik, musimy uzyć dict na początku i następnie przy pierwszym argumencie (tam, gdzie wrzucamy co chcemy sortować, nazwa zmiennej) daje items() żeby sortowało po każdej parze klucz:wartość,
-# miasto[1], bo sortuje tylko po liczbie mieszkańców z danego miasta, reverse=True, żeby pokazywało od największego do najmniejszego
+# miasta_popularity_sorted = dict(sorted(miasta.items(), key=lambda miasto: miasto[1], reverse=True)) # żeby posortować słownik, musimy uzyć dict na początku i następnie przy pierwszym argumencie (tam, gdzie wrzucamy co chcemy sortować, nazwa zmiennej) daje items() żeby sortowało po każdej parze klucz:wartość,
+# # miasto[1], bo sortuje tylko po liczbie mieszkańców z danego miasta, reverse=True, żeby pokazywało od największego do najmniejszego
 
-miasta_most_popular = list(miasta_popularity_sorted)[0] # żeby wydobyć pierwszy klucz to zamieniam słownik na listę i biorę pierwszy(0) index, tutaj dostaniemy pierwsze miasto z największą liczbą mieszkańców ze zmiennej miasta_popularity_sorted
+# miasta_most_popular = list(miasta_popularity_sorted)[0] # żeby wydobyć pierwszy klucz to zamieniam słownik na listę i biorę pierwszy(0) index, tutaj dostaniemy pierwsze miasto z największą liczbą mieszkańców ze zmiennej miasta_popularity_sorted
 
-with open("data/statystyki_miast.txt", mode="w", encoding="UTF-8") as f:
-    for miasto in miasta_popularity_sorted:
-        writer = f.write(f"{str(miasto)} : {miasta_popularity_sorted[miasto]} mieszkańców\n")
-    writer = f.write(f"Najbardziej popularne miasto to {miasta_most_popular} z liczbą mieszkańców: {miasta_popularity_sorted[miasta_most_popular]}")
+# with open("data/statystyki_miast.txt", mode="w", encoding="UTF-8") as f:
+#     for miasto in miasta_popularity_sorted:
+#         writer = f.write(f"{str(miasto)} : {miasta_popularity_sorted[miasto]} mieszkańców\n")
+#     writer = f.write(f"Najbardziej popularne miasto to {miasta_most_popular} z liczbą mieszkańców: {miasta_popularity_sorted[miasta_most_popular]}")
+
+
+## Zadanie 6
+
+# with open("data/osoby.json", mode="r", encoding="UTF-8") as f:
+#     people = json.load(f)
+
+# for person in people:
+#     print(people[person]["imie"])
+#     print(people[person]["adres"]["miasto"])
+#     print("------------------------------")
+
+# most_dedictated_hobby_list = list() # lista osoób, które spędzają więcej niż 10h nad swoim hobby
+
+# for person in people:
+#     hours_per_week_data = (people[person]["hobby"]["ile_h_per_tydzien"])
+#     if hours_per_week_data >= 10:
+#         most_dedictated_hobby_list.append((people[person]["imie"]))
+#         if not (people[person]["hobby"]["zespół"]):
+#             print(f"{(people[person]["imie"])} wykonuje hobby samotnie")
+
+# with open("data/aktywne_hobby.txt", mode="w", encoding="UTF-8") as f:
+#     f.write("\n".join(str(person) for person in most_dedictated_hobby_list))
+
+# Zadanie 7
+
+
+# with open("data/produkty.csv", mode="r", encoding="UTF-8") as f:
+#     reader = csv.DictReader(f, delimiter=";")
+    
+#     products_list = [product for product in reader] # za pomocą list comprehension robię listę z tego co odczytał reader
+
+# with open("data/produkty.json", mode="w", encoding="UTF-8") as f:
+#     json.dump(products_list, f, ensure_ascii=False, indent=4)
+
+# with open("data/produkty.json", mode="r", encoding="UTF-8") as f:
+#     reader_json = json.load(f)
+#     for product in reader_json:
+#         if product["kategoria"] == "elektronika":
+#             if float(product["cena"]) >=100:
+#                 print(product)
+
+
+# Zadanie 8
+
+
+# pwd_data = os.getcwd()+ '\\data' # scieżka z plikami
+
+# data_items = os.listdir(pwd_data) # itemy, które są w tej ścieżce, potem będę szukać, które mają w sobie .txt
+
+# data_text_items = [text_item for text_item in data_items if ".txt" in text_item] # list comprehension, tylko pliki ".txt" które są w data_items
+
+
+
+# pliki = dict()
+
+# for item in data_text_items:
+#     with open(f"{pwd_data}\\{item}", mode="r", encoding="UTF-8") as f:
+#         reader = f.read()
+#         reader_object = dict()
+#         reader_object["liczba_slow"] = len(reader.split())
+#         reader_object["liczba_linii"] = len(reader.split("\n"))
+#         pliki[item] = {
+#             item: reader,
+#             "liczba_slow": reader_object["liczba_slow"],
+#             "liczba_linii" : reader_object["liczba_linii"]
+#         }
+
+# pprint(pliki)
+
+
+# with open("data/statystki_plikow.json", mode="w", encoding="UTF-8") as f:
+#     json.dump(pliki, f, ensure_ascii=False, indent=4)
+
+
+# Zadanie 9
+
+
+with open("data/dzialy.json", mode="r", encoding="UTF-8") as f:
+    departaments = json.load(f) 
+
+with open("data/pracownicy.csv", mode="r", encoding="UTF-8") as f:
+    reader = csv.DictReader(f) # jako, że będziemy porównywać dane json vs cvs, deserializujemy i konwertujemy csv na dict
+    employees = [employee for employee in reader] # wrzucamy słownik do zmiennej jako liste ze słownikami
+

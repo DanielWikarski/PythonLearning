@@ -1,0 +1,32 @@
+{
+    "aktywne_hobby.txt": {
+        "aktywne_hobby.txt": "Ania\nAndrzej",
+        "liczba_slow": 2,
+        "liczba_linii": 2
+    },
+    "dziennik.txt": {
+        "dziennik.txt": "2026-06-01 10:15:00 - INFO - Użytkownik się zalogował\n2026-06-01 10:16:12 - ERROR - Błąd połączenia\n2026-06-21 13:15:00 - INFO - Użytkownik się zalogował\n2026-06-30 10:16:12 - ERROR - Logowanie się nie powiodło\n2026-06-30 10:18:12 - INFO - Reset hasła użytkownika\n2026-07-11 13:15:00 - INFO - Użytkownik się zalogował\n2026-07-21 13:15:00 - ERROR - Błąd połączenia\n2026-07-22 13:15:00 - INFO - Użytkownik się zalogował\n---Podsumowanie logów---\nINFO: 5 | WARNING: 0 | ERROR: 3\nData importu logów: 05/07/2026 | 22:47\n----------------------\n",
+        "liczba_slow": 80,
+        "liczba_linii": 13
+    },
+    "liczby.txt": {
+        "liczby.txt": "1\n5\n7\n9\n2\n4\n6\n0\n11\n22\n33\n44\nNIE\n40\nTAK",
+        "liczba_slow": 15,
+        "liczba_linii": 15
+    },
+    "notatki.txt": {
+        "notatki.txt": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software like Aldus PageMaker and Microsoft Word including versions of Lorem Ipsum.",
+        "liczba_slow": 99,
+        "liczba_linii": 1
+    },
+    "parzyste.txt": {
+        "parzyste.txt": "2\n4\n6\n0\n22\n44\n40\n",
+        "liczba_slow": 7,
+        "liczba_linii": 8
+    },
+    "statystyki_miast.txt": {
+        "statystyki_miast.txt": "Wrocław : 2 mieszkańców\nKołobrzeg : 2 mieszkańców\nKraków : 1 mieszkańców\nBiałystok : 1 mieszkańców\nZakopane : 1 mieszkańców\nAugustów : 1 mieszkańców\nCiechocinek : 1 mieszkańców\nNajbardziej popularne miasto to Wrocław z liczbą mieszkańców: 2",
+        "liczba_slow": 37,
+        "liczba_linii": 8
+    }
+}

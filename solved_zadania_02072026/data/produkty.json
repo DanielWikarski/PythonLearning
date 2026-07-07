@@ -1,0 +1,17 @@
+[
+    {
+        "nazwa": "Klawiatura",
+        "cena": "199.99",
+        "kategoria": "elektronika"
+    },
+    {
+        "nazwa": "Książka",
+        "cena": "39.90",
+        "kategoria": "edukacja"
+    },
+    {
+        "nazwa": "Monitor",
+        "cena": "899.00",
+        "kategoria": "elektronika"
+    }
+]
