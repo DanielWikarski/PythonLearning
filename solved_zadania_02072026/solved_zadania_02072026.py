@@ -209,10 +209,23 @@ import os
 # Zadanie 9
 
 
-with open("data/dzialy.json", mode="r", encoding="UTF-8") as f:
-    departaments = json.load(f) 
+# with open("data/dzialy.json", mode="r", encoding="UTF-8") as f:
+#     departaments = json.load(f) 
 
-with open("data/pracownicy.csv", mode="r", encoding="UTF-8") as f:
-    reader = csv.DictReader(f) # jako, że będziemy porównywać dane json vs cvs, deserializujemy i konwertujemy csv na dict
-    employees = [employee for employee in reader] # wrzucamy słownik do zmiennej jako liste ze słownikami
+# with open("data/pracownicy.csv", mode="r", encoding="UTF-8") as f:
+#     reader = csv.DictReader(f, delimiter=";") # jako, że będziemy porównywać dane json vs cvs, deserializujemy i konwertujemy csv na dict
+#     employees = [employee for employee in reader] # wrzucamy słownik do zmiennej jako liste ze słownikami
+
+# employees_up_for_veryfication = list()
+# for employee in employees:
+#     if employee["dzial"] in departaments:
+#        if int(employee["wynagrodzenie"]) > departaments[employee["dzial"]]["limit_wynagrodzenia"]:
+#            print(f"Pracownik {employee["imie"]} zarabia podejrzanie dużo...(Dane pracownika wysłane do weryfikacji)")
+#            employees_up_for_veryfication.append(employee)
+
+# with open("data/raport_HR.txt", mode="w", encoding="UTF-8") as f:
+#     for employee in employees_up_for_veryfication:
+#         employee_profil = f.write(f"Dane pracownika do weryfikacji HR: \nIMIE: {employee["imie"]}\nNAZWISKO: {employee["nazwisko"]}\nDział: {employee["dzial"]}\nWynagrodzenie: {employee["wynagrodzenie"]}zł\n")
+
+# Zadanie 10
 

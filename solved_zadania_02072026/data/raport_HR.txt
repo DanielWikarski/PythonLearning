@@ -1,0 +1,10 @@
+Dane pracownika do weryfikacji HR: 
+IMIE: Agnieszka
+NAZWISKO: Jagoda
+Dział: Help_Desk
+Wynagrodzenie: 7000zł
+Dane pracownika do weryfikacji HR: 
+IMIE: Janusz
+NAZWISKO: Banan
+Dział: IT_Manager
+Wynagrodzenie: 8500zł
