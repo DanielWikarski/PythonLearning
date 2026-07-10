@@ -227,5 +227,50 @@ import os
 #     for employee in employees_up_for_veryfication:
 #         employee_profil = f.write(f"Dane pracownika do weryfikacji HR: \nIMIE: {employee["imie"]}\nNAZWISKO: {employee["nazwisko"]}\nDział: {employee["dzial"]}\nWynagrodzenie: {employee["wynagrodzenie"]}zł\n")
 
-# Zadanie 10
+# # Zadanie 10
 
+# with open("data/klienci.json", mode="r", encoding="UTF-8") as f:
+#     client_list = json.load(f)
+
+# with open("data/zamowienia.csv", mode="r", encoding="UTF-8") as f:
+#     orders = csv.DictReader(f, delimiter=";")
+#     order_list = list()
+#     for order in orders:
+#         order_list.append(order)
+
+# klienci_po_email = dict()
+
+# for client in client_list:
+#     klienci_po_email[client["email"]] = client
+
+# vip_rabaty = list()
+# nieznani = list()
+# def calculate_order_value(qty:int, price:float):
+#     if isinstance(qty, int) and isinstance(price, float):
+#         return qty*price
+#     else:
+#         raise ValueError(f"Błąd danych, obie warości muszą być liczbami!")
+
+# order_value_total = 0
+# for order in order_list:
+#     order_value = calculate_order_value(int(order["ilosc"]), float(order["cena_jednostkowa"]))
+#     order_value_total += order_value
+#     for client in client_list:
+#         if order["email"] == client["email"]:
+#             if order_value >=500 and client["vip"] == True:
+#                 vip_rabaty.append({"id":order["id"],"produkt":order["produkt"],"wartość": round(order_value,2), "imie_klienta": client["imie"]})
+#     if order["email"] not in klienci_po_email:
+#         nieznani.append((order["id"],order["email"]))
+
+# with open("data/vip_rabaty.json", mode="w", encoding="UTF-8") as f:
+#     json.dump(vip_rabaty,f, ensure_ascii=False, indent=4)
+
+# with open("data/nieznani_klienci.txt", mode="w", encoding="UTF-8") as f:
+#     for unidentified_client in nieznani:
+#         f.write(str(f"ID: {unidentified_client[0]} | EMAIL: {unidentified_client[1]}\n"))
+
+# with open("data/podsumowanie.txt", mode="w", encoding="UTF-8") as f:
+#         f.write(str(f"Łączna liczba zamówień: {len(order_list)}\n"\
+#                     f"Suma wartości zamówień: {order_value_total}zł\n"\
+#                     f"Liczba zamówień VIP z przydzielonym rabatem: {len(vip_rabaty)}\n"\
+#                     f"Nieznani klienci, który zamówili w naszym sklepie: {len(nieznani)}\n"))

@@ -1,0 +1,33 @@
+[
+    {
+        "email": "arkadiusz.poniedzialek@gmail.com",
+        "imie": "Arkadiusz",
+        "miasto": "Białystok",
+        "vip": true
+    },
+    {
+        "email": "aneta.wtorek@gmail.com",
+        "imie": "Aneta",
+        "miasto": "Olsztyn",
+        "vip": true
+    },
+      {
+        "email": "katarzyna.sroda@gmail.com",
+        "imie": "Katarzyna",
+        "miasto": "Augustów",
+        "vip": true
+    },
+          {
+        "email": "jacek.czwartek@gmail.com",
+        "imie": "Jacek",
+        "miasto": "Poznań",
+        "vip": true
+    },
+              {
+        "email": "krystian.piatek@gmail.com",
+        "imie": "Krystian",
+        "miasto": "Augustów",
+        "vip": true
+    }
+
+]

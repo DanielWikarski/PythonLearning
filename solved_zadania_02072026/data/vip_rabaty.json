@@ -1,0 +1,32 @@
+[
+    {
+        "id": "0001",
+        "produkt": "Koszulka",
+        "wartość": 3300.0,
+        "imie_klienta": "Aneta"
+    },
+    {
+        "id": "0002",
+        "produkt": "Bluza",
+        "wartość": 5010.0,
+        "imie_klienta": "Arkadiusz"
+    },
+    {
+        "id": "0003",
+        "produkt": "Sweter",
+        "wartość": 6629.7,
+        "imie_klienta": "Katarzyna"
+    },
+    {
+        "id": "0004",
+        "produkt": "Płaszcz",
+        "wartość": 5509.9,
+        "imie_klienta": "Krystian"
+    },
+    {
+        "id": "0005",
+        "produkt": "Bluza",
+        "wartość": 25050.0,
+        "imie_klienta": "Jacek"
+    }
+]

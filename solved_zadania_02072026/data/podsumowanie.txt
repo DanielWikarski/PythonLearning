@@ -1,0 +1,4 @@
+Łączna liczba zamówień: 6
+Suma wartości zamówień: 111796.6zł
+Liczba zamówień VIP z przydzielonym rabatem: 5
+Nieznani klienci, który zamówili w naszym sklepie: 1
