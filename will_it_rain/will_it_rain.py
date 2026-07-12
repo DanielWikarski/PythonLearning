@@ -6,9 +6,6 @@ cwd = os.getcwd()
 
 
 
-print("Sprawdźmy czy będzie padać!")
-print("---------------------------")
-date_arguments = input(f"Wpisz datę w formacie YYYY-MM-DD (np: 2026-07-10), a ja sprawdzę czy danego dnia będzie padać -> ").split("-")
 
 with open("queries_results.json", mode="r", encoding="UTF-8") as f:
     queries_results = json.load(f)
@@ -19,7 +16,7 @@ with open("queries_results.json", mode="r", encoding="UTF-8") as f:
 latitude = 53.1426772999997
 longitude = 23.131738654996585
 
-def date_validator()-> str:
+def date_validator(date_arguments)-> str:
     try:
         date_arguments_str = datetime.datetime.strptime(f"{date_arguments[0]}-{date_arguments[1]}-{date_arguments[2]}", "%Y-%m-%d")
         date_arguments_formated = date_arguments_str.strftime("%Y-%m-%d")
@@ -51,17 +48,26 @@ def get_weather_data_rain(latitude, longitude, searched_date):
 
 
 
-try:
-    if len(date_arguments) !=1:
-        date_arguments = [int(argument)for argument in date_arguments]
-            
-except:
-    raise ValueError("Podano błędne dane wejściowe, dane muszą być liczbami!")
+
 
 def main_app():
+    
+    print("Sprawdźmy czy będzie padać!")
+    print("---------------------------")
+    date_arguments = input(f"Wpisz datę w formacie YYYY-MM-DD (np: 2026-07-10), a ja sprawdzę czy danego dnia będzie padać -> ").split("-")
+
+
+    try:
+        if len(date_arguments) !=1:
+            date_arguments = [int(argument)for argument in date_arguments]
+            
+    except:
+        raise ValueError("Podano błędne dane wejściowe, dane muszą być liczbami!")
+
+
     if len(date_arguments) == 3:
         print("Sprawdzam pogodę...")
-        date_arguments_formated = date_validator()
+        date_arguments_formated = date_validator(date_arguments)
         for querry in queries_results:
             if querry == date_arguments_formated:
                 print(f"Wynik wyszukiwania znajduje się już w bazie: DATA: {querry} | WERDYKT: {queries_results[querry]}")
@@ -76,7 +82,6 @@ def main_app():
         for querry in queries_results:
             if querry == str(tomorrow_date):
                 print(f"Wynik wyszukiwania znajduje się już w bazie: DATA: {querry} | WERDYKT: {queries_results[querry]}")
-                return querry,queries_results[querry]
         weather_data = get_weather_data_rain(latitude, longitude, tomorrow_date)
         rain_possibility_data = rain_possibility(weather_data)
         print(rain_possibility_data)
@@ -85,10 +90,50 @@ def main_app():
         raise Exception(f"Wymagane są 3 argumenty - podano: {len(date_arguments)}")
 
 
-results = main_app()
-queries_results[str(results[1])] = results[0]
 
-with open("queries_results.json", mode="w", encoding="UTF-8") as f:
-    json.dump(queries_results,f,ensure_ascii=False, indent=4)
 
+
+
+
+
+####################################### part 2 zadania ################################################################################
+
+class WeatherForecast():
+    # inicjator klasy, co dzieje się podczas inicjowania instancji klasy
+    def __init__(self) -> None:
+        self.queries_results_file = "queries_results.json" # nazwa pliku do pobrania
+        self.queries_results = dict() # tutaj będę przetrzymywał to co przejmiemy z pliku
+
+        # próbujemy pobrać plik json i go otworzyć
+        try:
+            with open(self.queries_results_file, mode="r", encoding="UTF-8") as f:
+                self.queries_results = json.load(f) # do słownika, który zrobiłem wyżej zapisuje to co zwrócił mi json podczas deserializacji
+        except FileNotFoundError: # jeśli nie znajdziei pliku, to idziemy dalej - nie jest nam on potrzebny jeśli user używa aplikacji pierwszy raz, finalnie i tak doprowadzimy do zrobienia nowego pliku
+            print(f"[INFO] Nie znaleziono pliku {self.queries_results_file}, tworzę nową bazę danych.")
+        
+
+    def __setitem__(self, date, rain_possibility_data): # definiuję zachowanie instacji w przypadku jakbyśmy traktowali ją jak słownik -  instancja klasy zachowuje się jak słownik i jak wpiszę wf["2026-07-13"] = "pada" to doda dokładnie te dane do pliku queries_results.json, lecz tak na prawde jest
+        # ona potrzebna do __getitem__, żeby móc potem przypisać wyniki które otrzymamy do pliku json
+        self.queries_results[date] = rain_possibility_data
+        with open(self.queries_results_file, mode="w", encoding="UTF-8") as f:
+            json.dump(self.queries_results,f,ensure_ascii=False, indent=4)
+
+    def __getitem__(self, date): # definiuje zachowanie instacji, jeśli podamy klucz, np jak zrobimy wf["2026-07-13"] ma to nam zwrócić wartość, którą możemy potem zapisać do zmiennej. Przepytujemy instacje, czy ma w sobie dany klucz, jeśli nie - to odwołujemy się do API.
+        if date in self.queries_results: # sprawdzam czy data jest w słowniku z danymi
+            print(f"Wynik wyszukiwania znajduje się już w bazie: DATA: {date} | WERDYKT: {self.queries_results[date]}")
+            return self.queries_results[date] # zwracam werdykt dla daty
+        else: # jeśli nie - odpalam funkcję, która pobiera dane pogodowe z API, następnie z dane z tej funkcji przekazuje do kolejnej funkcji, która ustala na podstawie tych danych, czy będzie padało, czy też nie.
+            weather_data = get_weather_data_rain(latitude, longitude, date) # pobranie danych pogodowych z  API
+            rain_possibility_data = rain_possibility(weather_data) # sprawdzanie na podstawie danych werdyktu
+            self[date] = rain_possibility_data # pobrane dane przypisuje do instancji, powoduje to jednoczesnym zapisaniem danych do pliku json, stąd definiowaliśmy zachowannie przypisania
+            return rain_possibility_data # zwracam werdykt dla daty
+
+    def __iter__(self):  # umożliwiamy iterowanie po instancji, definiujemy zachowanie, jeśli user będzie chciał przeiterować przez nią - czyli co ma się zadziać
+        for data in self.queries_results: # ma się zrobić pętla for
+            yield data # ma zwrócić daty znane już w pliku json
+
+    def items(self):
+        for data in self.queries_results:
+            yield data, self.queries_results[data]
+wf = WeatherForecast()
 
