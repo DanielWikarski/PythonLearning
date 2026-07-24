@@ -118,7 +118,6 @@ class FileProcessor:
         print("\nContent after modyfing:\n")
         for row in self.data:
             print(",".join(str(item) for item in row))
-        print("----------------------------------")
 
 
 # sprawdzam czy jest wystarczająca ilośc argumentów podanych przy uruchomieniu skryptu, jak nie to jest błąd i podaje
@@ -129,6 +128,5 @@ if len(sys.argv) < 3:
 in_file = sys.argv[1]
 out_file = sys.argv[2]
 user_changes = sys.argv[3:]  
-
 processor = FileProcessor(in_file, out_file, user_changes)
 processor.process()
