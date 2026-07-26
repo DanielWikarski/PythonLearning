@@ -8,9 +8,7 @@ with open("data.json", "r", encoding="utf-8") as data: # with open("nazwa_pliku"
 
 
 
-account_balance = data[0]
-warehouse = data[1]
-account_history = data[2]
+
 
 
 def warehouse_management_system(account_balance,warehouse,account_history):
@@ -61,7 +59,10 @@ def warehouse_management_system(account_balance,warehouse,account_history):
                 print("\n[BŁĄD] Wprowadzoną nieprawidłową komendę\n")
         elif user_choice_option == "KONIEC":
             print("\nZakończono działanie programu, zapisuję wprowadzone zmiany...")
-            return account_balance, warehouse, account_history
+            with open("data.json", "w", encoding="utf-8") as data:
+                new_data = account_balance, warehouse, account_history
+                json.dump(new_data, data, indent = 4, ensure_ascii = False )
+                return
         elif user_choice_option == "ZAKUP":
             print("\n[FUNKCJA: ZAKUP]")
             print(f"Aktualny stan konta: {account_balance["account_balance"]}")
@@ -175,11 +176,218 @@ def warehouse_management_system(account_balance,warehouse,account_history):
         else:
              print("\n[BŁĄD] Wprowadzoną nieprawidłową komendę\n")
         
+#################### part 2 zadania  ##########################
+
+class Manager:
+
+    def __init__(self, account_balance,warehouse,account_history) -> None:
+        # przy inicjacji Manager pobiera dane z JSON
+        self.account_balance = account_balance
+        self.warehouse = warehouse
+        self.account_history = account_history
+        self.commands = {
+        } 
+
+    # dekorator do obsługi funkcji
+    # wrzuca on do słownika klucz - komendę i wartość - funkcję
+    def assign(self,command):
+        def wrapper(function):
+            self.commands[command] = function
+            return function
+        return wrapper
+
+    
+    def execute(self,command):
+        if command in self.commands: # jeśli w słowniku jest komenda to ją uruchomi
+            return self.commands[command](self) # ze słownika zwraca funkcję, która jest uruchamiana
+        else:
+            print("\n[BŁĄD] Wprowadzoną nieprawidłową komendę\n")
 
 
-new_data =warehouse_management_system(account_balance, warehouse, account_history)
-# nowe!!!
-# tym  sposobem znów na koniec odpalamy nasz plik json z danymi, a potem podmieniam dane, które dam są z danymi, które zwróciła nam funkcja
-with open("data.json", "w", encoding="utf-8") as data:
-    json.dump(new_data, data, indent = 4, ensure_ascii = False ) # za pomocą json.dump(nazwa_nowych_danych, zmienna tymczasowa z odpalania pliku (wyżej ją napisałem jako as nazwa_zmiennej_tymczasowej), indent = 4 -tutaj mówimy, żeby python z jsonie powstawiał odstępy, jak tego nie  zrobię, to w json będzie wszystko "spłaszczone", ensure_ascii = False - żeby brało polskie znaki) 
+# pobiera dane z JSON i wrzuca je do instacji manager, na której pracujemy
+manager = Manager(data[0],data[1],data[2])
 
+
+
+
+# za pomocą dekoratora w momencie odpalenia programu z automatu mapuje "SALDO" z funkcją saldo i przypisuje to do słownika commands - to samo się dzieje z pozostałymi funkcjami,
+# czyli mamy self.commands = {"SALDO" : saldo} - dzięki temu potem w execute po wpisaniu komendy odnajduje to w słowniku i return self.commands[command](self) uruchamia, czyli szuka wpisanej komendy i wywołuje odpowiednią funkcję
+@manager.assign("SALDO")
+def saldo(manager):
+        user_choice_option_balance = str(input(f"\n[FUNKCJA: SALDO]\n"
+                                        "\n---------------------------------------------------------------\n"
+                                        f"Aktualne saldo konta: {round(manager.account_balance,2)}zł\n"
+                                        "---------------------------------------------------------------\n\n"
+                                        f"Wybierz opcje z listy za pomocą komendy: \n\n"
+                                        f"[DODAJ]\n"
+                                        f"[ODEJMIJ] \n\n")).upper()
+        if user_choice_option_balance == "DODAJ":
+            balance_modifier_add = (input("\nWpisz wartość do dodania, do salda konta: "))
+            try:
+                balance_modifier_add = float(balance_modifier_add)
+            except:
+                print("[BŁĄD] Suma musi być liczbą! Wprowadzono niepoprawny tym danych")
+                balance_modifier_add = 0
+            manager.account_balance = round(manager.account_balance,2) + balance_modifier_add
+            print(f"\nDodano do salda konta: {balance_modifier_add}zł \n"
+            f"Na koncie jest łącznie: {manager.account_balance}zł")
+            manager.account_history[f"{datetime.now()}"] = f"Dodano do salda {balance_modifier_add}zł"
+        elif user_choice_option_balance == "ODEJMIJ":
+            balance_modifier_subtract = (input("\nWpisz wartość do odjęcia od salda konta: "))
+            try:
+                balance_modifier_subtract = float(balance_modifier_subtract)
+            except:
+                print("[BŁĄD] Suma musi być liczbą! Wprowadzono niepoprawny tym danych")
+                balance_modifier_subtract = 0
+            manager.account_balance = round(manager.account_balance,2) - balance_modifier_subtract
+            print(f"\nOdjęto od salda konta: {balance_modifier_subtract}zł \n"
+            f"Na koncie jest łącznie: {round(manager.account_balance,2)}zł")
+            manager.account_history[f"{datetime.now()}"] = f"Odjęto od salda {balance_modifier_subtract}zł"
+        else:
+            print("\n[BŁĄD] Wprowadzoną nieprawidłową komendę\n")
+
+@manager.assign("KONIEC")
+def koniec(manager):
+    with open("data.json", "w", encoding="utf-8") as data:
+        new_data = manager.account_balance, manager.warehouse, manager.account_history
+        json.dump(new_data, data, indent = 4, ensure_ascii = False )
+
+@manager.assign("ZAKUP")
+def zakup(manager):
+    print("\n[FUNKCJA: ZAKUP]")
+    print(f"Aktualny stan konta: {manager.account_balance}")
+    user_choice_option_buy_product_name = str(input("\nPodaj nazwę produktu: \n")).upper()
+    user_choice_option_buy_product_price =(input("\nPodaj cenę produktu(zł): \n"))
+    user_choice_option_buy_product_qty =(input("\nPodaj ilość sztuk produktu: \n"))
+
+    try:
+        user_choice_option_buy_product_price = float(user_choice_option_buy_product_price)
+        user_choice_option_buy_product_qty = int(user_choice_option_buy_product_qty )
+    except ValueError:
+        print("[BŁĄD] Cena i ilość muszą być liczbami!")
+        return
+
+
+    if user_choice_option_buy_product_name.strip() == "" or not isinstance(user_choice_option_buy_product_price, float) or not isinstance(user_choice_option_buy_product_qty, int):
+        print("[BŁĄD] Nie wprowadzono danych o produkcie, lub podano je w złej formie. (Cena oraz ilośc muszą być cyfrą)")
+    elif user_choice_option_buy_product_price * user_choice_option_buy_product_qty <= manager.account_balance:
+        manager.account_balance = manager.account_balance - (user_choice_option_buy_product_price * user_choice_option_buy_product_qty)
+
+
+        if user_choice_option_buy_product_name in manager.warehouse:
+            manager.warehouse[user_choice_option_buy_product_name] = {
+                "ILOŚĆ": manager.warehouse[user_choice_option_buy_product_name]["ILOŚĆ"] + user_choice_option_buy_product_qty,
+                "CENA": user_choice_option_buy_product_price
+            }
+
+
+        else:    
+            manager.warehouse[user_choice_option_buy_product_name] = {
+                "ILOŚĆ": user_choice_option_buy_product_qty,
+                "CENA": user_choice_option_buy_product_price
+            }
+
+
+        manager.account_history[f"{datetime.now()}"] = f"Zakupiono: {user_choice_option_buy_product_name} | Sztuk: {user_choice_option_buy_product_qty} | Cena jednostkowa: {user_choice_option_buy_product_price}"
+        print(f"\nDodano do stanu magazynowego: \n"
+            f"[PRODUKT]: {user_choice_option_buy_product_name}\n"
+            f"[CENA]: {user_choice_option_buy_product_price}zł\n"
+            f"[SZTUK]: {user_choice_option_buy_product_qty}\n"
+            f"ZA ZAKUP ZAPŁACONO: {user_choice_option_buy_product_price * user_choice_option_buy_product_qty}zł")
+    else:
+        price = user_choice_option_buy_product_price * user_choice_option_buy_product_qty
+        print(f"\n[BRAK WYSTARACZAJĄCYCH ŚRODKÓW] \n"
+            f"Aby dokonać zakupu brakuje: {price - round(manager.account_balance,2)}zł")
+
+@manager.assign("MAGAZYN")
+def magazyn(manager):
+    print(f"\n[FUNKCJA: MAGAZYN]")
+    print(f"Aktualny stan magazynu: \n")
+
+    for item in manager.warehouse:
+        print(f"Produkt: {item}")
+        print(f"Ilość dostępna: {manager.warehouse[item]["ILOŚĆ"]}")
+        print(f"Cena jednostkowa: {manager.warehouse[item]["CENA"]}")
+        print(f"--------------------------------------------")
+
+@manager.assign("SPRZEDAŻ")
+def sprzedaz(manager):
+
+
+    print(f"\n[FUNKCJA: SPRZEDAŻ]")
+    user_choice_option_sales_item = (input("\nPodaj nazwę produktu: \n")).upper()
+    user_choice_option_sales_qty =(input("\nPodaj ilość sztuk produktu: \n"))
+    try:
+        user_choice_option_sales_qty = int(user_choice_option_sales_qty)
+    except ValueError:
+        print("[BŁĄD] Cena i ilość muszą być liczbami!")
+        return
+
+    if user_choice_option_sales_item.strip() == "" or not isinstance(user_choice_option_sales_qty, int):
+        print("[BŁĄD] Podano błędną nazwę produktu lub ilość sztuk produktu")
+    
+    elif user_choice_option_sales_item in manager.warehouse: 
+        if manager.warehouse[user_choice_option_sales_item]["ILOŚĆ"] >= user_choice_option_sales_qty:
+
+                manager.warehouse[user_choice_option_sales_item]["ILOŚĆ"] = manager.warehouse[user_choice_option_sales_item]["ILOŚĆ"] - user_choice_option_sales_qty
+                manager.account_balance = manager.account_balance+ (manager.warehouse[user_choice_option_sales_item]["CENA"]*user_choice_option_sales_qty)
+
+                print(f"Sprzedano produkt: {user_choice_option_sales_item} | Sztuk: {user_choice_option_sales_qty} | Po cenie jednostkowej: {manager.warehouse[user_choice_option_sales_item]["CENA"]} | Dodano do konta: {(manager.warehouse[user_choice_option_sales_item]["CENA"]*user_choice_option_sales_qty)}zł")
+                print(f"Po wykonanej sprzedaży saldo wynosi: {round(manager.account_balance,2)}zł")
+                manager.account_history[f"{datetime.now()}"] = f"Sprzedano produkt: {user_choice_option_sales_item} | Sztuk: {user_choice_option_sales_qty} | Po cenie jednostkowej: {manager.warehouse[user_choice_option_sales_item]["CENA"]} | Dodano do konta: {(manager.warehouse[user_choice_option_sales_item]["CENA"]*user_choice_option_sales_qty)}zł"
+        else:
+            print(f"[BŁĄD] Brak wystarczającej ilości produktu {user_choice_option_sales_item} na stanie magazynowym. Wymagana: {user_choice_option_sales_qty} | Posiadana: {manager.warehouse[user_choice_option_sales_item]["ILOŚĆ"]}")
+    else:
+        print(f"[BŁĄD] Brak produktu {user_choice_option_sales_item} na stanie magazynowym")
+
+@manager.assign("KONTO")
+def konto(manager):
+    print(f"\n[FUNKCJA: KONTO]\n")
+    print("----------------------------------------------------------------")
+    print(f"AKTUALNY STAN KONTA: {manager.account_balance}zł")
+    print("----------------------------------------------------------------")
+
+@manager.assign("LISTA")
+def lista(manager):
+    print(f"\n[FUNKCJA: LISTA OPERACJI]")
+    if len(manager.account_history) == 0:
+        print("Brak zarejestrowanych operacji.")
+    else:
+        for event in manager.account_history: 
+            print(f"{"-"*len(event+manager.account_history[event])}")
+            print(f"- {event} : {manager.account_history[event]}")  
+
+@manager.assign("PRZEGLĄD")
+def przeglad(manager):
+    print(f"\n[FUNKCJA: PRZEGLĄD]")
+    print(f"W systemie jest łącznie {len(manager.account_history)} operacji.\n")
+
+    print("[BRAK WPISANYCH DANYCH WYŚWIETLA CAŁĄ HISTORIĘ]")
+    from_timeline= str(input("Podaj początek przedziału daty do sprawdzenia operacji (format: YYYY-MM-DD)"))
+    to_timeline = str(input("Podaj koniec przedziału daty do sprawdzenia operacji (format: YYYY-MM-DD)"))
+
+    print(f"Operacje w przedziale czasowym od {from_timeline} do {to_timeline}")
+    for event in manager.account_history:
+        if from_timeline in event or to_timeline in event:
+            print(f"{"-"*len(event+manager.account_history[event])}")
+            print(f"{event} : {manager.account_history[event]}")
+
+
+
+def main_manager():
+    while True:
+            user_choice_option = str(input("\nWybierz opcje z listy za pomocą komendy: \n\n"
+                                    "[SALDO]\n"
+                                    "[SPRZEDAŻ]\n"
+                                    "[ZAKUP] \n"
+                                    "[KONTO]\n"
+                                    "[LISTA]\n"
+                                    "[MAGAZYN]\n"
+                                    "[PRZEGLĄD]\n"
+                                    "[KONIEC]\n\n")).upper()
+            manager.execute(user_choice_option)
+            if user_choice_option == "KONIEC":
+                break
+
+
+# main_manager()
