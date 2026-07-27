@@ -133,11 +133,6 @@ class Person:
 
 
 
-
-p1_address = Address("15-743", "Białystok", "Wierzbowa", "5A")
-p1_job = Job("Orange", "Salesman", 8000.00)
-person1 = Person("Daniel", 27, p1_address, p1_job)
-
 class Employee(Person):
     def __init__(self, employee_id:int, departament:str,name: str, age: int, address: Address, job: Job = None) -> None:
         super().__init__(name, age, address, job)
@@ -159,15 +154,6 @@ class Author:
             "Author's surname" : self.surname
         }
         return author
-
-
-
-
-author1 = Author("Adam", "Mickiewicz")
-author2 = Author("Bolesław", "Prus")
-
-
-
 
 
 class Book:
@@ -202,9 +188,6 @@ class Book:
         return book_to_dict
 
 
-book1 = Book("Dziady", author1, 1821, 250)
-book2 = Book("Dziady 2", author1, 1823, 255)
-book3 = Book("Lalka", author2, 1887, 600)
 
 
 class Library:
@@ -278,16 +261,131 @@ class Library:
 
 
 
-library = Library("World of Books")
-library.add_book(book2)
-library.add_book(book3)
-library.add_book(book1)
 
-books_sorted = library.sort_books_by_year()
-books_sorted_by_pages = library.sort_books_by_pages_desc()
-title_year_pairs = library.get_title_year_pairs()
-sorted_title_year_pairs = library.sort_title_year_pairs()
-statistics = library.get_statistics()
-library_to_dict = library.to_dict()
+class Book2:
+    def __init__(self,book_title:str, book_author:Author, pages:int, is_book_read:bool ) -> None:
 
+        validate_single_string_input(book_title)
+        validate_single_string_input(book_author.name)
+        validate_single_string_input(book_author.surname)
+        if not isinstance(pages, int) and pages > 0:
+                    raise ValueError("Number or pages has to be a number")
+        if not isinstance(is_book_read, bool):
+                            raise ValueError("Book's read status has to be a bool type")
+        self.book_title = book_title
+        self.book_author = book_author
+        self.pages = pages
+        self.is_book_read = is_book_read
+
+    def __repr__(self) -> str:
+        return f"{self.book_title} - {self.book_author.name} {self.book_author.surname}, {self.pages} stron."
+
+
+
+    @property
+    def is_long(self) -> bool:
+        if self.pages > 300:
+            return True
+        else:
+            return False
+
+
+    def mark_as_read(self):
+        self.is_book_read = True
+
+
+
+
+class BankAccount:
+
+    def __init__(self, holders_name, initial_balance) -> None:
+        validate_single_string_input(holders_name)
+        if not isinstance(initial_balance, float | int) or initial_balance <0:
+            raise TypeError("Balance has to be numeric type such as float or intiger and cannot be negative.")
+        self.holders_name = holders_name
+        self.__initial_balance = initial_balance
+        self.operation_list = []
+
+
+    def balance(self) -> float | int:
+        return self.__initial_balance
+
+    def deposit(self, deposit_amount:float | int):
+        if isinstance(deposit_amount, int | float) and deposit_amount > 0:
+            self.__initial_balance = self.__initial_balance + deposit_amount 
+            self.operation_list.append(("deposit", deposit_amount))
+        else:
+            raise ValueError("Deposit amount has to be type of intiger or float and cannot be negative")
+
+    def withdraw(self, withdraw_amount:float | int):
+        if isinstance(withdraw_amount, int | float) and withdraw_amount > 0:
+            if self.__initial_balance > withdraw_amount:
+                self.__initial_balance = self.__initial_balance - withdraw_amount 
+                self.operation_list.append(("withdraw", withdraw_amount))
+            else:
+                raise ValueError("You cannot withdraw more than you own")
+        else:
+            raise ValueError("Withdraw amount has to be type of intiger or float and cannot be negative")
+
+    def show_account_history(self):
+        for operation in self.operation_list:
+            print(operation)
+
+
+    def __lt__(self, other):
+        return self.__initial_balance < other.__initial_balance
+
+    def __gt__(self, other):
+            return self.__initial_balance < other.__initial_balance
+
+
+class Point:
+
+    def __init__(self,x,y) -> None:
+
+        if not isinstance(x, int | float) or not isinstance(y, int | float):
+            raise TypeError("X and Y have to be type of intigers or floats ")
+        self.x = x
+        self.y = y
+
+    def  __repr__(self) -> str:
+        return f" X:{self.x}, Y:{self.y}"
+
+    def move(self, dx, dy):
+        if not isinstance(dx, int | float) or not isinstance(dy, int | float):
+                    raise TypeError("dy and dx have to be type of intigers or floats ")
+        self.x += dx
+        self.y += dy
+
+    @property
+    def as_tuple(self) -> tuple:
+        return (self.x,self.y)
+
+p1 = Point(1,2) #xy
+p2 = Point(3,3) #xy
+
+
+class Rectangle:
+        # lbc - left bottom corner, rtc - right top corner
+    def  __init__(self, lbc:Point, rtc:Point) -> None:
+        if not isinstance(lbc, Point) or not isinstance(rtc, Point):
+            raise TypeError("lbc [left bottom corner] and rtc [right top corner] have to be objects of Point class.")
+        #sprawdzam prawą stronę
+        if not rtc.x > lbc.x and not rtc.y > lbc.y: 
+            raise TypeError("rtc must be further left than lbc and further top than lbc")
+        self.lbc = lbc
+        self.rtc = rtc
+        self.width = rtc.x - lbc.x
+        self.height = rtc.y - lbc.y
+        self.area = self.width * self.height
+        self.perimeter = (self.width + self.height)*2
+
+    def contains(self,point:Point) -> bool:
+        if (point.y > self.lbc.y < self.rtc.y) and (point.x > self.lbc.x < self.rtc.x):
+            return True
+        else:
+            return False
+
+
+rect = Rectangle(p1,p2)
 
