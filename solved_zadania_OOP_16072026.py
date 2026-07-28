@@ -361,8 +361,7 @@ class Point:
     def as_tuple(self) -> tuple:
         return (self.x,self.y)
 
-p1 = Point(1,2) #xy
-p2 = Point(3,3) #xy
+
 
 
 class Rectangle:
@@ -387,5 +386,255 @@ class Rectangle:
             return False
 
 
-rect = Rectangle(p1,p2)
+
+
+
+class Address2:
+    def __init__(self, postal_code:str, city:str, street:str, house_number:str) -> None:
+
+        validate_non_empty_strigs(
+            postal_code=postal_code,
+            city=city,
+            street=street,
+            house_number=house_number
+        )
+
+        self.postal_code = postal_code
+        self.city = city
+        self.street = street
+        self.house_number = house_number
+
+            
+    def to_dict(self) -> dict:
+        dict_summary = {
+            "postal_code" : self.postal_code,
+            "city" : self.city,
+            "street" : self.street,
+            "house_number": self.house_number
+        }
+        return dict_summary
+
+
+class Customer:
+
+    def __init__(self, customers_name, address:Address2) -> None:
+        if not isinstance(customers_name, str):
+            raise TypeError("Customer's name has to be type of string.")
+        self.customers_name = customers_name
+        if not isinstance(address, Address2):
+            raise TypeError("Address has to be type of class Address2")
+        self.address = address
+
+    def __repr__(self) -> str:
+        return f"{self.customers_name}"
+    def to_dict(self) -> dict:
+            dict_summary = {
+                "Customer's name": self.customers_name,
+                "Customer's Address": {
+                    "postal_code" : self.address.postal_code,
+                    "city" : self.address.city,
+                    "street" : self.address.street,
+                    "house_number": self.address.house_number
+                }
+            }
+            return dict_summary
+
+
+
+class Order:
+
+    def __init__(self, customer:Customer, products_list:list) -> None:
+        if not isinstance(customer, Customer):
+            raise TypeError("Customer has to be type of class Customer")
+        self.customer = customer
+        if not isinstance(products_list, list):
+            raise TypeError("Products list has to be type of list")
+        self.products_list = products_list
+
+        for product in products_list:
+            validate_single_string_input(product[0])
+            if not isinstance(product[1], int | float) or not product[1] > 0:
+                raise TypeError("Price of product has to be type of intiger or float and cannot be negative.")
+            if not isinstance(product[2], int) or not product[2] > 0:
+                raise TypeError("QTY of product has to be declared as intiger and cannot be negative")
+
+    def total_price(self):
+        total_price = 0
+        for product in self.products_list:
+            total_price += product[1] * product[2]
+        return total_price
+
+    def add_product(self, products_name:str, price:float | int, qty:int):
+        validate_single_string_input(products_name)
+        if not isinstance(products_name, str):
+            raise ValueError("Product's name has to be string type")
+        if not isinstance(price, int | float) or not price > 0:
+            raise TypeError("Price of product has to be type of intiger or float and cannot be negative.")
+        if not isinstance(qty, int) or not qty > 0:
+            raise TypeError("QTY of product has to be declared as intiger and cannot be negative")
+        self.products_list.append((products_name, price, qty))
+
+    def get_expensive_products(self, more_than_price):
+        more_than_price_list = []
+        for product in self.products_list:
+            if product[1] >= more_than_price:
+                more_than_price_list.append(product)
+        return more_than_price_list
+
+    def to_dict(self):
+        dict_summary = {
+            "Customer": self.customer,
+            "Products": [product for product in self.products_list],
+            "Total_price": self.total_price()
+        }
+        return dict_summary
+
+
+class Employee:
+
+    def __init__(self, employees_name, monthly_salary) -> None:
+        validate_single_string_input(employees_name)
+        if not isinstance(monthly_salary, int | float) or not monthly_salary > 0:
+            raise TypeError("Employee's monthy salary has to be declared as intiger or float type and must be positive number")
+        self.employees_name = employees_name
+        self.__monthly_salary = monthly_salary
+
+    def salary(self) -> int | float:
+        return self.__monthly_salary
+
+    def give_raise(self, raise_amount):
+        if raise_amount > 0:
+            self.__monthly_salary += raise_amount
+        else:
+            raise ValueError("Raise amount have to be positive number and greater than 0")
+
+    def calculate_bonus(self) -> int | float:
+        return self.__monthly_salary * 0.05
+
+
+
+class Manager(Employee):
+
+    def __init__(self, employees_name, monthly_salary, departament_title, employees_under) -> None:
+        validate_single_string_input(employees_name)
+        validate_single_string_input(departament_title)
+        self.departament_title = departament_title
+        if not isinstance(monthly_salary, int | float) or not monthly_salary > 0:
+            raise TypeError("Employee's monthy salary has to be declared as intiger or float type and must be positive number")
+        if not isinstance(employees_under, int) or not employees_under > 0:
+            raise TypeError("Manager has to own at least 1 employee under itself and it has to be intiger type of input")
+        self.employees_under = employees_under
+        super().__init__(employees_name, monthly_salary)
+
+    def calculate_bonus(self) -> int | float:
+        return round(super().calculate_bonus() * 2  + (100 * self.employees_under),2)
+
+class Developer(Employee):
+
+    def __init__(self, employees_name, monthly_salary, known_technologies:list) -> None:
+        validate_single_string_input(employees_name)
+        if not isinstance(monthly_salary, int | float) or not monthly_salary > 0:
+            raise TypeError("Employee's monthy salary has to be declared as intiger or float type and must be positive number")
+        if not isinstance(known_technologies, list):
+            raise TypeError("Developer's known technologies have to be a list type")
+        for tech in known_technologies:
+            validate_single_string_input(tech)
+        self.known_technologies = known_technologies
+        super().__init__(employees_name, monthly_salary)
+
+    def add_technology(self, technology):
+        validate_single_string_input(technology)
+        if technology not in self.known_technologies:
+            self.known_technologies.append(technology)
+        else:
+            raise ValueError("Technology already known")
+
+
+    def calculate_bonus(self) -> int | float:
+        return round((super().calculate_bonus() * 1.4) + (200*len(self.known_technologies)),2)
+
+
+class Book3:
+    def __init__(self,book_title:str, book_author:Author, relase_date:int, is_book_rented:bool) -> None:
+
+        validate_single_string_input(book_title)
+        validate_single_string_input(book_author.name)
+        validate_single_string_input(book_author.surname)
+        if not isinstance(relase_date, int) and relase_date > 0:
+            raise ValueError("Relase date has to be a number")
+        if not isinstance(is_book_rented, bool):
+            raise TypeError("Book rented status has to be boolean type")
+        self.book_title = book_title
+        self.book_author = book_author
+        self.relase_date = relase_date
+        self.is_book_rented = is_book_rented
+
+    def __repr__(self) -> str:
+        return f"Book info: {self.book_title}, {self.relase_date} | Author: {self.book_author.name} {self.book_author.surname} | Is book being rented: {self.is_book_rented}"
+
+    def to_dict(self) -> dict:
+        book_to_dict = {
+            "book_title" : self.book_title,
+            "book_author" : {
+            "Author's name" : self.book_author.name,
+            "Author's surname" : self.book_author.surname,
+        },
+        "relase_date" : self.relase_date,
+        "is book rented" : self.is_book_rented
+
+        }
+        return book_to_dict
+
+class User:
+
+    def __init__(self, users_name:str, limit_book_rent:int) -> None:
+        validate_single_string_input(users_name)
+        if not isinstance(limit_book_rent, int) or not limit_book_rent > 0:
+            raise ValueError("Limit book rent has to be intiger type and cannot be negative or 0 (at least 1)")
+        self.users_name = users_name
+        self.limit_book_rent = limit_book_rent
+        self.list_of_rented_books = []
+
+
+class Library2(Library):
+    def __init__(self) -> None:
+        self.books = []
+        self.registered_users = []
+
+    def register_user(self, user:User):
+        if not isinstance(user, User):
+            raise TypeError("User has to be object of User class")
+        if user in self.registered_users:
+            raise ValueError("User already exists as registered")
+        self.registered_users.append(user)
+
+
+    def borrow_book(self, user:User, book:Book3):
+        if not user in self.registered_users:
+            raise ValueError("User is not registered. Register user and then try again.")
+        if not book in self.books:
+            raise ValueError("Book doesn't exist in library's book list.")
+        if book.is_book_rented == True:
+            raise ValueError("Book is already rented. Try to rent another book or wait till this book is returned.")
+        if len(user.list_of_rented_books) >= user.limit_book_rent:
+            raise ValueError("This user has reached its limit of rented books and cannot borrow another one.")
+        book.is_book_rented = True
+        user.list_of_rented_books.append(book)
+
+    def return_book(self, user:User, book:Book3):
+        if not book in user.list_of_rented_books:
+            raise ValueError("This user doesn't have that book rented.")
+        user.list_of_rented_books.remove(book)
+        book.is_book_rented = False
+
+
+
+
+
+
+
+
+
+
+
 
